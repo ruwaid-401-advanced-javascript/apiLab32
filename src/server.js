@@ -39,8 +39,22 @@ app.route('/todo')
     res.json(record);
   })
   .delete(async (req, res) => {
-    let _id = req.body;
+    let _id = req.body._id
     let record = await schema.findByIdAndDelete(req.body._id);
+    res.json(record);
+  });
+
+
+  app.put('/todo/:id',async (req, res) => {
+    let _id = req.params.id;
+    let record = await schema.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    });
+    res.json(record);
+  })
+  app.delete('/todo/:id',async (req, res) => {
+    let _id = req.params.id;
+    let record = await schema.findByIdAndDelete({_id});
     res.json(record);
   });
 
