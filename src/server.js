@@ -1,6 +1,8 @@
 'use strict';
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
+
 const PORT = process.env.PORT || 3000;
 
 const error404 = require('./middleware/404');
@@ -10,7 +12,7 @@ const schema = require('../model.js');
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 app.get('/', (req, res) => res.status(200).send('hiii  401'));
 
 
