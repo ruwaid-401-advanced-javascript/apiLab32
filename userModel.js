@@ -62,10 +62,17 @@ Users.statics.authenticate = function (username, pass) {
  * @returns {string} token
  */
 Users.statics.generateToken = function (user) {
+  let roles = {
+    user: ['read'],
+    writers: ['read', 'create'],
+    editors: ['read', 'update', 'create'],
+    admin: ['read', 'update', 'create', 'delete'],
+  };
+
   let expire = process.env.EXPIRE;
   return jwt.sign({
     id: user.id,
-    capabilities: user.role,
+    capabilities: roles[user.role],
   }, process.env.SECRET, { expiresIn: expire });
 };
 
