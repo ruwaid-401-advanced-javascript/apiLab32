@@ -20,11 +20,11 @@ const base64 = require('base-64');
 
 module.exports = (req, res, next) => {
   console.log('heeaaaader',req.headers);
-  console.log('basic',basic);
-  console.log('[user, pass]',user, pass);
   
   let basic = req.headers.authorization.split(' ').pop();
   let [user, pass] = base64.decode(basic).split(':');  
+  console.log('basic',basic);
+  console.log('[user, pass]',user, pass);
 
     users.authenticate(user, pass)
       .then(validUser => {
@@ -35,6 +35,6 @@ module.exports = (req, res, next) => {
         next();
         return;
       })
-      .catch(err => next('Invalid Login!!'));
+      .catch(err => next('userName or password Wrong!!'));
 
 };

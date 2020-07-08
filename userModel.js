@@ -5,19 +5,19 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const Users = mongoose.Schema({
-  username: { type: String, required: true},
+  username: { type: String, required: true },
   password: { type: String, required: true },
-  email:{ type: String, required: true },
+  email: { type: String, required: true },
   role: { type: String, default: 'user' },
 });
 
-// Users.pre('save', async function () {
-//   console.log('oooooo');
-  
-//   this.password = await bcrypt.hash(this.password, 2);
-//   console.log(this.password,'pppppppppp');
-//   return;
-// });
+Users.pre('save', async function () {
+  // console.log('oooooo');
+
+  this.password = await bcrypt.hash(this.password, 5);
+  // console.log(this.password,'pppppppppp');
+  // return;
+});
 
 
 /**
@@ -42,9 +42,17 @@ Users.statics.athenticateRole = function (user, capability) {
  * @param {string} password
  */
 Users.statics.authenticate = function (username, pass) {
+  console.log(username, pass, 'ttttttttttttttttttttt');
+
   return this.find({ username })
     .then(async (user) => {
-      return bcrypt.compare(pass, user[0].password) ? user[0] : null;
+      console.log(user, 'uuuuuuuuuuuuuuuuuuuuuuuuuuu');
+      console.log(await bcrypt.compare(pass, user[0].password));
+      if (await bcrypt.compare(pass, user[0].password)) {
+        return user[0];
+      }
+      return null;
+      // return bcrypt.compare(pass, user[0].password) ? null : null;
     });
 };
 
